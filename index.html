@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/BillyChanClub/billychanclub.github.io/main/images/favicon.ico">
+    <title>Wheel Spinner</title>
+</head>
+<body>
+    <section class="left">
+        <div id="wheel--decoration"></div>
+        <div id="wheel">
+            <span style="transform: rotate(-54deg)">EAT</span>
+            <span style="transform: rotate(18deg">SLEEP</span>
+            <span style="transform: rotate(90deg)">SHOWER</span>
+            <span style="transform: rotate(162deg)">CHORES</span>
+            <span style="transform: rotate(234deg)">GAMES</span>
+        </div>
+        <div class="arrow"></div>
+    </section>
+    <section class="right">
+        <textarea name="inputs" id="inputs"  class="options" placeholder=
+"EAT 20%
+SLEEP 20%
+SHOWER 20%
+CHORES 20%
+GAMES 20%"
+        ></textarea>
+    </section>
+    <div class="winner-screen">
+        <div class="inner">
+            <span>WINNER!</span>
+            <span id="winner-text">...</span>
+        </div>
+    </div>
+    <script src="./scripts/wheel.js"></script>  
+</body>
+</html>

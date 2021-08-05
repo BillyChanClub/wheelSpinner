@@ -1,0 +1,123 @@
+body{
+    margin: 0;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: sans-serif;
+  }
+  
+  section{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 2rem;
+    background-color: lightgray;
+    overflow: hidden;
+  }
+  #wheel{
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-self: flex-end;
+    cursor: pointer;
+    width: 85vmin;
+    flex-shrink: 1;
+    height: auto;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    background-color: brown;
+    box-sizing: border-box;
+    border: 8px dashed black;
+    background-clip: content-box;
+    background-image: conic-gradient(
+      white 0deg, white 72deg, 
+      red 0deg, red 144deg, 
+      green 0deg, green 216deg, 
+      blue 0deg, blue 288deg, 
+      blueviolet 0deg, blueviolet 360deg);
+    
+    &--decoration{
+      display: block;
+      position: absolute;
+      width: calc(85vmin - 2px);
+      flex-shrink: 1;
+      height: auto;
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      background-color: white;
+      box-shadow: 
+        0 0 2px 5px black,
+        0 0 0 18px brown,
+        0 0 3px 20px #0003,
+        0 0 5px 28px #0002,
+        0 0 0 30px darkorange;
+    }
+    span{
+      font-size: 1.5em;
+      position: absolute;
+      left: 50%;
+      width: 50%;
+      text-align: center;
+      padding: .1em;
+      transform-origin: center left;
+      user-select: none;
+      text-wrap: none;
+    }
+  }
+  .arrow{
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    border: 1.5em solid transparent;
+    border-left: none;
+    border-right: 2.5em solid brown;
+    right: 1em;
+    
+    &::before{
+      content: "";
+      position: absolute;
+      width: 0px;
+      height: 0px;
+      border: 1em solid transparent;
+      border-left: none;
+      border-right: 2em solid #000E;
+      right: -36px;
+      top: -16px;
+    }
+  }
+  #inputs{
+    font-size: 1.5em;
+    width: 100%;
+    height: 100%;
+    resize: none;
+  }
+  
+  .winner-screen{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0009;
+    cursor: pointer;
+    display: none;
+    
+    .inner{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background-color: lightgray;
+      width: 30em;
+      height: 15em;
+      
+      span{
+        color: black;
+        font-size: 2em;
+        margin: .5em 0;
+      }
+    }
+  }
