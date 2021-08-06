@@ -14,12 +14,13 @@ wheel.addEventListener("click", () => spinTheWheel())
 
 function spinTheWheel(){
   if(!isSpinning){
+    playAudio(wheelTime)
     isSpinning = true;
     wheel.style.transform = `rotate(0deg)`
     wheel.style.transition = "none"
     winningAngle = Math.random() * 360
     setTimeout(()=>{
-      wheel.style.transform = `rotate(${winningAngle + 360 * 10 + 90}deg)` 
+      wheel.style.transform = `rotate(${winningAngle + 360 * 10}deg)` 
       wheel.style.transition = `transform ${wheelTime}s cubic-bezier(.23,1,.32,1)`;
     },10)
     setTimeout(()=>{
@@ -40,17 +41,17 @@ function spinTheWheel(){
 
 function addSpan(i, size, inputs){
   size = 360 / (inputs.length * 2)
-  let angleStart = 90 / (inputs.length) * (inputs.length-2);
+  let angleStart = size; //90 / (inputs.length) * (inputs.length-2);
   let span = document.createElement("span")
   span.innerHTML = inputs[i]
   let angle = i * size * 2
   //console.log((i * size) - ((i+1) * size))
-  span.style.transform = `rotate(${angle-angleStart}deg)`
+  span.style.transform = `rotate(${angle+angleStart}deg)`
   wheel.appendChild(span)
 }
 
 function addAnglePercent(deg, prev, i, inputs){
-  let angle = deg - 90 - ((deg-prev)/2)
+  let angle = prev + ((deg-prev)/2); //deg - 90 - ((deg-prev)/2)
   let span = document.createElement("span")
   span.innerHTML = inputs[i]
   span.style.transform = `rotate(${angle}deg)`
@@ -67,12 +68,13 @@ function normalWheel(args){
   for(let i = 0; i < inputs.length; i++){
     addSpan(i, size, inputs)
     let color = colors[i % colors.length]
-    gradientString += `${color} ${i * size}deg ${(i+1)*size}deg`
+    gradientString += `${color} ${0}deg ${(i+1)*size}deg`
     if(i != (inputs.length - 1)){
       gradientString += ", "
     }
     options.push([inputs[i], (i+1)*size])
   }
+  
   gradientString += ")";
   //wheel.style["background-image"] = "conic-gradient(blue, red)"
   wheel.style["backgroundImage"] = gradientString;
@@ -151,3 +153,35 @@ function testRegex(inputs, regex){
     return regex.test(string)
   })
 }
+
+let audioTimer = 10
+let audios = []
+let audioIndex = 0
+for(let i = 0; i < 10; i++){
+  let audio = new Audio("./audio/click.wav")
+  audio.volume = 0.2
+  audio.playbackRate = 1.2
+  audios.push(audio)
+}
+
+function playAudio(time){
+  audioTimer = 1.02
+  loopAudio(audios)
+}
+function loopAudio(audios){
+  if(volumeOn){
+    audios[audioIndex].play()
+  }
+    audioIndex++
+    audioIndex = audioIndex >= audios.length ? 0 : audioIndex
+    audioTimer **= 1.03
+    if(audioTimer < 630){
+      setTimeout(loopAudio, audioTimer, audios)
+    }
+}
+let volumeOn = true
+let volumeButton = document.getElementById("volumeControl")
+volumeButton.addEventListener("click", (e)=> {
+  volumeOn = !volumeOn
+  volumeButton.innerHTML = volumeOn ? "volume_up" : "volume_off"
+})

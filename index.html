@@ -6,29 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles/style.css">
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/BillyChanClub/billychanclub.github.io/main/images/favicon.ico">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
     <title>Wheel Spinner</title>
 </head>
 <body>
-    <section class="left">
-        <div id="wheel--decoration"></div>
-        <div id="wheel">
-            <span style="transform: rotate(-54deg)">EAT</span>
-            <span style="transform: rotate(18deg">SLEEP</span>
-            <span style="transform: rotate(90deg)">SHOWER</span>
-            <span style="transform: rotate(162deg)">CHORES</span>
-            <span style="transform: rotate(234deg)">GAMES</span>
-        </div>
-        <div class="arrow"></div>
-    </section>
-    <section class="right">
-        <textarea name="inputs" id="inputs"  class="options" placeholder=
+    <div><span id="volumeControl"class="material-icons">volume_up</span></div>
+    <main>
+        <section class="left">
+            <div id="wheel--decoration">
+            <div id="wheel">
+                <span style="transform: rotate(36deg)">EAT</span>
+                <span style="transform: rotate(108deg">SLEEP</span>
+                <span style="transform: rotate(180deg)">SHOWER</span>
+                <span style="transform: rotate(251deg)">CHORES</span>
+                <span style="transform: rotate(324deg)">GAMES</span>
+            </div>
+                <div id="wheel--center"></div>
+                <div class="arrow"></di>
+            </div>
+        </section>
+        <section class="right">
+            <textarea name="inputs" id="inputs"  class="options" placeholder=
 "EAT 20%
 SLEEP 20%
 SHOWER 20%
 CHORES 20%
 GAMES 20%"
-        ></textarea>
-    </section>
+            >
+        </textarea>
+        </section>
+    </main>
     <div class="winner-screen">
         <div class="inner">
             <span>WINNER!</span>
