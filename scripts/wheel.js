@@ -39,24 +39,23 @@ function spinTheWheel(){
   }
 }
 
-function addSpan(i, size, inputs){
-  size = 360 / (inputs.length * 2)
-  let angleStart = size; //90 / (inputs.length) * (inputs.length-2);
+
+function addSpan(inputs, i, angle, size, prev){
   let span = document.createElement("span")
   span.innerHTML = inputs[i]
-  let angle = i * size * 2
-  //console.log((i * size) - ((i+1) * size))
-  span.style.transform = `rotate(${angle+angleStart}deg)`
+  angle /= 2
+  angle += prev != undefined ? prev/2 : size/2*i /* If we get a previous size (from the formula that handles percents), use that instead */
+  span.style.transform = `rotate(${angle}deg)`
   wheel.appendChild(span)
 }
 
-function addAnglePercent(deg, prev, i, inputs){
-  let angle = prev + ((deg-prev)/2); //deg - 90 - ((deg-prev)/2)
-  let span = document.createElement("span")
-  span.innerHTML = inputs[i]
-  span.style.transform = `rotate(${angle}deg)`
-  wheel.appendChild(span)
-  //console.log(angle)
+function addSeparator(angle){
+  let el = document.createElement("div")
+  el.classList.add("separator")
+  angle = Math.round(angle)
+  el.style.transform = `rotate(${angle}deg)`
+  wheel.appendChild(el)
+  //console.log("separator", angle)
 }
 
 function normalWheel(args){
@@ -66,9 +65,11 @@ function normalWheel(args){
   options = []
   wheel.innerHTML = "";
   for(let i = 0; i < inputs.length; i++){
-    addSpan(i, size, inputs)
+    let angle = (i+1)*size
+    addSpan(inputs, i, angle, size)
+    addSeparator(angle)
     let color = colors[i % colors.length]
-    gradientString += `${color} ${0}deg ${(i+1)*size}deg`
+    gradientString += `${color} ${angle-size}deg ${angle}deg`
     if(i != (inputs.length - 1)){
       gradientString += ", "
     }
@@ -83,6 +84,7 @@ function normalWheel(args){
 inputArea.addEventListener("input", e => {
   let inputs = inputArea.value.split("\n")
   let regex = /\d+\%$/
+  if(inputs.length == 1) {inputs.push("")}
   if(testRegex(inputs, regex)){
     let knownSizes = []
     let unknownSizes = 0
@@ -114,13 +116,14 @@ inputArea.addEventListener("input", e => {
       let finalSize
       if(knownSizes[i] != undefined){
         finalSize =  ((360 * knownSizes[i] / 100)+addedSize)
-        addAnglePercent(finalSize, addedSize, i, inputs)
+        addSpan(inputs, i, finalSize, 0, addedSize)
         addedSize = finalSize
       }else{ 
         finalSize = size+addedSize
-        addAnglePercent(finalSize, addedSize, i, inputs)
+        addSpan(inputs, i, finalSize, 0, addedSize)
         addedSize = finalSize
       }
+      addSeparator(finalSize)
       //console.log(finalSize+"deg")
       options.push([inputs[i], finalSize])
       gradientString += `${color} ${0}deg ${finalSize}deg`
@@ -179,9 +182,10 @@ function loopAudio(audios){
       setTimeout(loopAudio, audioTimer, audios)
     }
 }
-let volumeOn = true
+let volumeOn = false
 let volumeButton = document.getElementById("volumeControl")
 volumeButton.addEventListener("click", (e)=> {
   volumeOn = !volumeOn
   volumeButton.innerHTML = volumeOn ? "volume_up" : "volume_off"
 })
+

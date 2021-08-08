@@ -87,7 +87,7 @@ section .right {
   background-color: brown;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  border: 7px dashed black;
+  border: 5px dashed white;
   background-clip: content-box;
   background-image: conic-gradient(white 0deg, white 72deg, red 0deg, red 144deg, green 0deg, green 216deg, blue 0deg, blue 288deg, blueviolet 0deg, blueviolet 360deg);
 }
@@ -107,7 +107,7 @@ section .right {
       flex-shrink: 1;
   aspect-ratio: 1/1;
   border-radius: 50%;
-  background-color: white;
+  background-color: black;
   -webkit-box-shadow: 0 0 2px 5px black, 0 0 0 24px brown, 0 0 10px 30px #0003, 0 0 8px 30px #0002, 0 0 0 40px darkorange;
           box-shadow: 0 0 2px 5px black, 0 0 0 24px brown, 0 0 10px 30px #0003, 0 0 8px 30px #0002, 0 0 0 40px darkorange;
 }
@@ -152,11 +152,24 @@ section .right {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  -webkit-writing-mode: tb;
-      -ms-writing-mode: tb;
-          writing-mode: tb;
+  -webkit-writing-mode: vertical-lr;
+      -ms-writing-mode: tb-lr;
+          writing-mode: vertical-lr;
   text-orientation: upright;
   text-indent: 5%;
+}
+
+#wheel .separator {
+  width: 4px;
+  height: calc(50% + 8px);
+  background-color: #0009;
+  position: absolute;
+  top: -8px;
+  left: calc(50% - 2px);
+  -webkit-transform-origin: center bottom;
+          transform-origin: center bottom;
+  -webkit-filter: blur(5px);
+          filter: blur(5px);
 }
 
 .arrow {
