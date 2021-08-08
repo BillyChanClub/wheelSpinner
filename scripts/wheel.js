@@ -1,5 +1,4 @@
 const inputArea = document.querySelector("#inputs")
-const wheel = document.getElementById("wheel")
 const winnerScreen = document.querySelector(".winner-screen")
 const winnerText = document.querySelector("#winner-text")
 const colors = ["white", "red", "green", "blue", "blueviolet"]
@@ -10,7 +9,6 @@ let isSpinning = false
 let winningAngle = 0
 
 winnerScreen.addEventListener("click", () => winnerScreen.style.display = "none")
-wheel.addEventListener("click", () => spinTheWheel())
 
 function spinTheWheel(){
   if(!isSpinning){
@@ -81,7 +79,7 @@ function normalWheel(args){
   wheel.style["backgroundImage"] = gradientString;
 }
 
-inputArea.addEventListener("input", e => {
+inputArea.addEventListener("", e => {
   let inputs = inputArea.value.split("\n")
   let regex = /\d+\%$/
   if(inputs.length == 1) {inputs.push("")}
@@ -157,35 +155,184 @@ function testRegex(inputs, regex){
   })
 }
 
-let audioTimer = 10
 let audios = []
-let audioIndex = 0
-for(let i = 0; i < 10; i++){
+
+for(let i = 0; i < 5; i++){
   let audio = new Audio("./audio/click.wav")
-  audio.volume = 0.2
+  audio.volume = 0.1
   audio.playbackRate = 1.2
+  audio.preload = "auto"
   audios.push(audio)
 }
 
-function playAudio(time){
-  audioTimer = 1.02
-  loopAudio(audios)
+function playAudio(){
+  loopAudio()
 }
-function loopAudio(audios){
+function loopAudio(){
   if(volumeOn){
-    audios[audioIndex].play()
+    for(let i = 0; i < audios.length; i++){
+      if(audios[i].paused){
+        audios[i].play()
+        return
+      }
+    }
+    return
   }
-    audioIndex++
-    audioIndex = audioIndex >= audios.length ? 0 : audioIndex
+    //audioIndex++
+    //audioIndex = audioIndex >= audios.length ? 0 : audioIndex
+    /*
     audioTimer **= 1.03
     if(audioTimer < 630){
       setTimeout(loopAudio, audioTimer, audios)
     }
+    */
 }
-let volumeOn = false
+let volumeOn = true
 let volumeButton = document.getElementById("volumeControl")
 volumeButton.addEventListener("click", (e)=> {
   volumeOn = !volumeOn
   volumeButton.innerHTML = volumeOn ? "volume_up" : "volume_off"
 })
 
+
+
+/* -------------------------------- New Code ---------------------------------------------------------------- */
+
+
+const canvas = document.getElementById("new-wheel")
+const ctx = canvas.getContext("2d")
+ctx.translate(canvas.width / 2, canvas.height / 2)
+ctx.font = "50px sans-serif"
+ctx.textBaseline = "middle"
+ctx.textAlign = "right"
+console.log(ctx)
+
+class Wheel{
+  constructor(){
+    this.isSpinning = false
+    this.size = 490
+    this.rotation = 0
+    this.speed = 0
+    this.segments = []
+    this.colors = ["lightgray", "orange", "limegreen", "lightblue", "pink"]
+    this.segmentSize = 360 / this.segments.length
+  }
+  draw(){
+    this.rotation += this.speed
+    ctx.setTransform(1, 0, 0, 1, canvas.width/2, canvas.height/2)
+    ctx.rotate(-90 * Math.PI /180)
+    ctx.rotate(this.rotation * Math.PI /180)
+    /* Draw Segments */
+    for(let i = 0; i < this.segments.length; i++){
+      ctx.save()
+      ctx.beginPath();
+      ctx.fillStyle = this.colors[i % colors.length]
+      ctx.strokeStyle = "black"
+      ctx.lineWidth = 10
+      ctx.rotate(this.segmentSize * i * Math.PI / 180)
+      ctx.arc(0, 0, this.size, 0, this.segmentSize * Math.PI / 180)
+      ctx.lineTo(0,0)
+      ctx.closePath()
+      ctx.fill()
+      ctx.stroke()
+      /* Text for each segment */
+      ctx.fillStyle = "black"
+      ctx.rotate((this.segmentSize/2) * (Math.PI / 180))
+      ctx.fillText(this.segments[i][0], this.size - 35, 0, this.size/1.3)
+      ctx.restore()
+    }
+    ctx.beginPath()
+    ctx.strokeStyle = "white"
+    ctx.lineWidth = 12
+    ctx.setLineDash([Math.PI * 2 * this.size / this.segments.length / 4, Math.PI * 2 * this.size / this.segments.length / 4])
+    ctx.arc(0, 0, this.size, 0, Math.PI*2)
+    ctx.stroke()
+    /* Draw inner circle */
+    ctx.beginPath()
+    ctx.fillStyle = "white"
+    ctx.strokeStyle = "black"
+    ctx.lineWidth = 10
+    ctx.setLineDash([])
+    ctx.arc(0, 0, this.size/7, 0, Math.PI * 2)
+    ctx.closePath()
+    ctx.fill()
+    ctx.stroke()
+  }
+  changeSegments(inputs){
+    this.segments = inputs
+    this.segmentSize = 360 / this.segments.length
+  }
+}
+
+let wheel = new Wheel();
+wheel.changeSegments([["EAT", 0],["SLEEP", 90],["SHOWER", 180],["CHORES", 270]])
+wheel.draw()
+
+let a = 0
+
+function spin(){
+  if(wheel.isSpinning){
+    wheel.speed *= 0.99
+    //wheel.speed -= .1
+    if(wheel.speed <= 0.03){
+      wheel.isSpinning = false
+      let winningAngle = 360 - wheel.rotation % 360
+      for(let i = 0; i < wheel.segments.length; i++){
+        if(i == wheel.segments.length - 1){
+          win(wheel.segments[wheel.segments.length - 1][0])
+          console.log("Winner: " + wheel.segments[wheel.segments.length - 1][0])
+          return
+        }
+        if(winningAngle < wheel.segments[i+1][1]){
+          win(wheel.segments[i][0])
+          console.log("Winner: " + wheel.segments[i][0])
+          return
+        }
+      }
+      return
+    }
+    /* -- Audio -- */
+    
+    if(a == wheel.segments.length){
+      if(360 - wheel.rotation % 360 >= wheel.segments[a-1][1]){
+        a = 0
+      }
+    }else{
+      if(wheel.rotation % 360 >= wheel.segments[a % wheel.segments.length][1]){
+        a++
+        if(volumeOn){
+          playAudio()
+        }
+      }
+    }
+    
+    wheel.draw()
+    requestAnimationFrame(spin)
+  }
+}
+
+function win(string){
+  setTimeout(()=>{
+    winnerScreen.style.display = "flex";
+    winnerText.innerHTML = string;
+  }, 1000)
+}
+
+canvas.addEventListener("click", e =>{
+  wheel.isSpinning = !wheel.isSpinning
+  wheel.speed = Math.random() * 20 + 30
+  spin()
+})
+
+inputArea.addEventListener("input", e =>{
+  if(!wheel.isSpinning){
+    let inputs = inputArea.value.split("\n")
+    let segmentSize = 360 / inputs.length
+    let segments = []
+    for(let i = 0; i < inputs.length; i++){
+      segments.push([inputs[i], segmentSize * i])
+    }
+    wheel.changeSegments(segments)
+    wheel.draw()
+  }
+})
