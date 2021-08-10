@@ -12,25 +12,13 @@
     <title>Wheel Spinner</title>
 </head>
 <body>
-    <div><span id="volumeControl"class="material-icons">volume_off</span></div>
+    <div><span id="volumeControl"class="material-icons">volume_up</span></div>
     <main>
         <section class="left">
-            <div id="wheel--decoration">
-            <div id="wheel">
-                <span style="transform: rotate(36deg);">EAT</span>
-                <div class="separator" style="transform: rotate(72deg);"></div>
-                <span style="transform: rotate(108deg);">SLEEP</span>
-                <div class="separator" style="transform: rotate(144deg);"></div>
-                <span style="transform: rotate(180deg);">SHOWER</span>
-                <div class="separator" style="transform: rotate(216deg);"></div>
-                <span style="transform: rotate(252deg);">CHORES</span>
-                <div class="separator" style="transform: rotate(288deg);"></div>
-                <span style="transform: rotate(324deg);">GAMES</span>
-                <div class="separator" style="transform: rotate(360deg);"></div>
-            </div>
-                <div id="wheel--center"></div>
-                <div class="arrow"></di>
-            </div>
+            <div class="wheel-decoration"></div>
+            <canvas id="new-wheel" style="width: 100%; cursor: pointer" width="1000" height="1000">
+            </canvas>
+            <div class="arrow"></div>
         </section>
         <section class="right">
             <textarea name="inputs" id="inputs"  class="options" placeholder=
