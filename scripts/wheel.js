@@ -10,10 +10,12 @@ let audios = []
 let a = 0 // Variable that tracks the audio "clicks" of the wheel
 
 /* --- Tuning --- */
-const colors = ["lightgray", "orange", "limegreen", "lightblue", "pink"]
+const colors = ["#8ec4f7", "#ff9ccb", "#d7f58d", "#FCB97D", "#ffd365"]
+//const colors = ["#b7ded2", "#f6a6b2", "#f7c297", "#ffecb8", "#90d2d8"] // Pastel Carnival palette
+//const colors = ["#8ec4f7", "#ff9ccb", "#d7f58d", "#fffe8a", "#ffd365"] // Second Carnival palette // Nice independence blue #454B66 // Red wine #632B30
+const initialSegments = [{text: "EAT",angle: 0,size: 90},{text: "SLEEP",angle: 90,size: 90},{text: "SHOWER",angle: 180,size: 90},{text: "CHORES",angle: 270,size: 90}]
 let volumeOn = true
 let friction = 0.99
-
 /* --- Canvas Setup --- */
 ctx.translate(canvas.width / 2, canvas.height / 2)
 ctx.font = "50px sans-serif"
@@ -81,7 +83,7 @@ class Wheel{
       ctx.save()
       ctx.beginPath();
       ctx.fillStyle = this.colors[i % colors.length]
-      ctx.strokeStyle = "black"
+      ctx.strokeStyle = "#fff"
       ctx.lineWidth = 10
       ctx.rotate(this.segments[i].angle * Math.PI / 180)
       ctx.arc(0, 0, this.size, 0, this.segments[i].size * Math.PI / 180)
@@ -91,7 +93,7 @@ class Wheel{
       ctx.stroke()
       
       /* Text for each segment */
-      ctx.fillStyle = "black"
+      ctx.fillStyle = "#071013"
       ctx.rotate((this.segments[i].size/2) * (Math.PI / 180))
       ctx.fillText(this.segments[i].text, this.size - 35, 0, this.size/1.3)
       
@@ -101,6 +103,12 @@ class Wheel{
     /* Draw dashed outline on the wheel */
     ctx.beginPath()
     ctx.strokeStyle = "white"
+    ctx.lineWidth = 12
+    ctx.setLineDash([])
+    ctx.arc(0, 0, this.size, 0, Math.PI*2)
+    ctx.stroke()
+    ctx.beginPath()
+    ctx.strokeStyle = "black"
     ctx.lineWidth = 12
     ctx.setLineDash([Math.PI * 2 * this.size / this.segments.length / 4, Math.PI * 2 * this.size / this.segments.length / 4])
     ctx.arc(0, 0, this.size, 0, Math.PI*2)
@@ -127,9 +135,8 @@ class Wheel{
 
 /* --- Set up Wheel -- */
 let wheel = new Wheel();
-wheel.changeSegments([{text: "EAT",angle: 0,size: 90},{text: "SLEEP",angle: 90,size: 90},{text: "SHOWER",angle: 180,size: 90},{text: "CHORES",angle: 270,size: 90}])
+wheel.changeSegments(initialSegments);
 wheel.draw()
-
 
 function spin(){
   if(wheel.isSpinning){
@@ -178,7 +185,7 @@ function win(string){
   winnerText.innerHTML = string;
 }
 
-function testForPercent(inputs){
+function testForPercent(inputs){ // Check if there's a percent in one of the inputs
   for(let i=0; i<inputs.length; i++){
     if(regex.test(inputs[i])){
       return true
