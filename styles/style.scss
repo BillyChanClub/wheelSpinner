@@ -17,19 +17,42 @@
 $red: #940020;
 $blue: #4ec8dd;
 $blue2: #2079a5;
+
+//* Colors for the checkered background *//
+$color1: #ddceb3;
+$color2: lighten($color1, 5);
+
+@font-face {
+  font-family: "Ewert";
+  src: url("/fonts/Ewert-Regular.ttf") format("truetype");
+}
+.winner-screen {
+  font-family: Ewert;
+  font-size: 3em;
+}
+#winner-text {
+  font-family: serif;
+  font-size: 0.75em;
+}
+#inputs {
+  font-family: cursive;
+  font-size: 1.2em;
+}
 body {
-  margin: 0;
   height: 100vh;
-  font-family: sans-serif;
-  background-image: repeating-conic-gradient(from 0deg at 50% 110%, lighten($blue, 3%) 0deg 10deg, lighten($blue, 10%) 10deg 20deg)
+  margin: 0;
+  background-image: repeating-conic-gradient(
+    from 0deg at 50% 110%,
+    lighten($blue, 3%) 0deg 10deg,
+    lighten($blue, 10%) 10deg 20deg
+  );
 }
 main {
   display: grid;
+  height: 90%;
   padding: 2.5% 1em;
   margin: 0 auto;
-  height: 90%;
-  
-  //background-color: black;
+
   @include large {
     max-width: 150em;
     width: 80%;
@@ -40,15 +63,15 @@ main {
     width: 100%;
     gap: 3em;
     grid-template-rows: 1fr;
+    overflow-x: clip;
   }
 }
 section {
-  position: relative;
   display: flex;
-  align-items: center;
+  position: relative;
   justify-content: space-around;
+  align-items: center;
   padding: 2rem 0;
-  //background-color: lightgray;
   .right {
     flex-direction: column;
   }
@@ -64,51 +87,49 @@ section {
 
 #new-wheel {
   position: relative;
+  width: 100%;
+  cursor: pointer;
 }
 .wheel-decoration {
   position: absolute;
   width: 100%;
-  aspect-ratio: 1;
   height: auto;
+  aspect-ratio: 1;
   border-radius: 50%;
   background-color: transparent;
-  // border: 40px solid $red;
+  box-shadow: inset 0 0 20px 5px #0005, 0 0 0 5px white;
   box-sizing: unset;
   pointer-events: none;
-  box-shadow: 
-    inset 0 0 20px 5px #0005,
-    0 0 0 5px white;
-  //mix-blend-mode: color-burn;
 
-  &::after{
+  &::after {
     content: "";
+    position: absolute;
     width: 110%;
     height: auto;
-    inset: 0 0 0 0;
     aspect-ratio: 1;
-    position: absolute;
-    border-radius: 50%;
+    inset: 0 0 0 0;
     margin: auto -5%;
+    border-radius: 50%;
     background-color: lighten($red, 5%);
-    box-sizing: unset;
     box-shadow: inset 0 0 10px 5px #0002, 0 0 0 35px gold, 0 0 0 38px white;
+    box-sizing: unset;
     z-index: -1;
   }
-  &::before{
+  &::before {
     content: "";
-    background-color: gold;
+    position: absolute;
     inset: 0 0 0 0;
     top: 90%;
     width: 90%;
     height: 35%;
     margin: 0 auto;
     margin-bottom: -20px;
-    position: absolute;
-    z-index: -2;
-    transform-origin: center center;
     border: 3px solid white;
+    background-color: gold;
     box-shadow: inset 0 50px 40px 10px #8885;
+    transform-origin: center center;
     transform: perspective(200px) rotateX(20deg);
+    z-index: -2;
   }
 }
 
@@ -116,130 +137,125 @@ section {
   position: absolute;
   width: calc(110% + 75px);
   height: auto;
-  margin: auto;
   aspect-ratio: 1;
-  //margin-bottom: 35px;
+  margin: auto;
   border-radius: 50%;
-  background-image: radial-gradient(lighten($red, 10%), 65%, $red, 80%, lighten($red, 10%) 68% 100%);
+  background-image: radial-gradient(
+    lighten($red, 10%),
+    65%,
+    $red,
+    80%,
+    lighten($red, 10%) 68% 100%
+  );
   clip-path: polygon(40% 0, 60% 0, 50% 15%);
 }
 
-.right::before{
+.right::before {
   content: "";
+  position: absolute;
   width: 135%;
   height: 7vw;
-  background-color: darken($red, 5%);
-  position: absolute;
   top: 30px;
+  background-color: darken($red, 5%);
   clip-path: polygon(0% 0%, 100% 0%, 95% 50%, 100% 100%, 0px 100%, 5% 50%);
   z-index: -2;
 }
-.inputs-container{
+.inputs-container {
   position: relative;
   width: 100%;
   height: 90%;
   min-height: 20em;
-  &::before{
+  &::before {
     content: "";
+    position: absolute;
     width: 100%;
     height: 100%;
     top: 1px;
-    position: absolute;
     background-color: $blue2;
-    //border: 10px solid;
-    //border-image-source: url("https://thumbs.dreamstime.com/b/gold-star-set-good-rate-your-product-quality-42346294.jpg");
-    border-image-width: 30%;
-    mask: 
-    radial-gradient(circle at 0% 0%, white 0 8%, transparent 8.1% 100%), 
-    radial-gradient(circle at 100% 0%, white 0 8%, transparent 8.1% 100%),
-    radial-gradient(circle at 0% 100%, white 0 8%, transparent 8.1% 100%),
-    radial-gradient(circle at 100% 100%, white 0 8%, transparent 8.1% 100%);
+    mask: radial-gradient(circle at 0% 0%, white 0 8%, transparent 8.1% 100%),
+      radial-gradient(circle at 100% 0%, white 0 8%, transparent 8.1% 100%),
+      radial-gradient(circle at 0% 100%, white 0 8%, transparent 8.1% 100%),
+      radial-gradient(circle at 100% 100%, white 0 8%, transparent 8.1% 100%);
     pointer-events: none;
   }
 }
+#inputs-title {
+  position: absolute;
+  width: 115%;
+  height: 100%;
+  top: -42%;
+  pointer-events: none;
+  z-index: 100;
+  path {
+    fill: none;
+    stroke: #940020;
+    stroke-width: 140px;
+    stroke-linecap: square;
+  }
+  text {
+    font-family: Ewert;
+    font-size: 105px;
+    text-align: center;
+    fill: white;
+    dominant-baseline: central;
+  }
+}
 #inputs {
-  $color1: #ddceb3;
-  $color2: lighten($color1, 5);
-  font-size: 1.2em;
-  font-family: cursive;
   width: 100%;
   height: 100%;
-  resize: none;
   padding: 0 1em;
   padding-top: 2em;
+  resize: none;
+  border: 20px solid $blue2;
+  box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.167);
+}
+
+.winner-screen {
+  position: fixed;
+  display: flex;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  width: 100vw;
+  height: 100%;
+  background-color: #0009;
+  cursor: pointer;
+  z-index: 100;
+
+  .inner {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 30rem;
+    max-width: 90%;
+    height: 15rem;
+    background-color: lightgray;
+    box-shadow: 0 5px 15px #0008;
+
+    span {
+      margin: 0.2em 0;
+      color: black;
+    }
+  }
+}
+#winnter-text-decoration {
+  position: absolute;
+  inset: 0;
+  fill: #2079a5;
+  stroke: white;
+  stroke-width: 1px;
+}
+
+.square-background {
   background-image: repeating-conic-gradient(
     $color1 0turn 0.125turn,
     $color2 0.125turn 0.375turn,
     $color1 0.375turn 0.625turn,
     $color2 0.625turn 0.875turn,
     $color1 0.875turn 1turn
-    );
-  background-size: 0.75em 0.75em;
-  border: 20px solid $blue2;
-  // border-image-source: url("https://thumbs.dreamstime.com/b/gold-star-set-good-rate-your-product-quality-42346294.jpg");
-  // border-image-width: 20px;
-  // border-image-repeat: round;
-  // border-image-slice: 260;
-  box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.167);
-
-}
-
-.winner-screen {
-  position: fixed;
-  top: 0;
-  width: 100vw;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #0009;
-  cursor: pointer;
-  display: none;
-  z-index: 100;
-  
-  .inner {
-    $color1: #ddceb3;
-    $color2: lighten($color1, 5);
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background-color: lightgray;
-    width: 30em;
-    max-width: 90%;
-    height: 15em;
-    box-shadow: 0 5px 15px #0008;
-    background-image: repeating-conic-gradient(
-      $color1 0turn 0.125turn,
-      $color2 0.125turn 0.375turn,
-      $color1 0.375turn 0.625turn,
-      $color2 0.625turn 0.875turn,
-      $color1 0.875turn 1turn
-    );
-    background-size: 0.75em 0.75em;
-    
-    /*
-    &::after{
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-color: $blue2;
-      // mask:
-      //   radial-gradient(circle at 0 0, white 0 40px, transparent 41px 100%),
-      //   radial-gradient(circle at 100% 0, white 0 40px, transparent 41px 100%),
-      //   radial-gradient(circle at 0 100%, white 0 40px, transparent 41px 100%),
-      //   radial-gradient(circle at 100% 100%, white 0 40px, transparent 41px 100%), 
-      //   linear-gradient(white 0 10px, transparent 10px calc(100% - 10px), white 90% 100%),
-      //   linear-gradient(to right,white 0 10px, transparent 10px calc(100% - 10px), white 0 100%);
-      //clip-path: path("M10,10L90,10l0,80");
-    }
-    */
-
-    span {
-      color: black;
-      font-size: 2em;
-      margin: 0.5em 0;
-    }
-  }
+  );
+  background-size: 0.75rem 0.75rem;
 }

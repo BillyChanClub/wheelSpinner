@@ -11,6 +11,8 @@ let a = 0 // Variable that tracks the audio "clicks" of the wheel
 
 /* --- Tuning --- */
 const colors = ["#8ec4f7", "#ff9ccb", "#d7f58d", "#FCB97D", "#ffd365"]
+const colors4 = ["#8ec4f7", "#ff9ccb", "#d7f58d", "#FCB97D"]
+const colors3 = ["#8ec4f7", "#ff9ccb", "#d7f58d"]
 //const colors = ["#b7ded2", "#f6a6b2", "#f7c297", "#ffecb8", "#90d2d8"] // Pastel Carnival palette
 //const colors = ["#8ec4f7", "#ff9ccb", "#d7f58d", "#fffe8a", "#ffd365"] // Second Carnival palette // Nice independence blue #454B66 // Red wine #632B30
 const initialSegments = setInitialSegments("EAT, SLEEP, SHOWER, CHORES, GAMES")
@@ -18,7 +20,7 @@ let volumeOn = true
 let friction = 0.99
 /* --- Canvas Setup --- */
 ctx.translate(canvas.width / 2, canvas.height / 2)
-ctx.font = "50px sans-serif"
+ctx.font = "50px serif"
 ctx.textBaseline = "middle"
 ctx.textAlign = "right"
 
@@ -88,7 +90,7 @@ class Wheel{
     for(let i = 0; i < this.segments.length; i++){
       ctx.save()
       ctx.beginPath();
-      ctx.fillStyle = this.colors[i % colors.length]
+      ctx.fillStyle = this.colors[i % this.colors.length]
       ctx.strokeStyle = "#fff"
       ctx.lineWidth = 8
       ctx.rotate(this.segments[i].angle * Math.PI / 180)
@@ -145,6 +147,7 @@ class Wheel{
   changeSegments(inputs){
     this.segments = []
     this.segments = inputs
+    this.colors = this.segments.length % 5 == 1 ? this.segments.length % 20 == 1 ? colors3 : colors4 : colors //Making sure there's no repeat color next to each other
     a = wheel.segments.length - 1 //Update the sound tracker variable
     
   }
