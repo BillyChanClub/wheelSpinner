@@ -11,14 +11,16 @@ let a = 0 // Variable that tracks the audio "clicks" of the wheel
 
 /* --- Tuning --- */
 const colors = ["#8ec4f7", "#ff9ccb", "#d7f58d", "#FCB97D", "#ffd365"]
+const colors4 = ["#8ec4f7", "#ff9ccb", "#d7f58d", "#FCB97D"]
+const colors3 = ["#8ec4f7", "#ff9ccb", "#d7f58d"]
 //const colors = ["#b7ded2", "#f6a6b2", "#f7c297", "#ffecb8", "#90d2d8"] // Pastel Carnival palette
 //const colors = ["#8ec4f7", "#ff9ccb", "#d7f58d", "#fffe8a", "#ffd365"] // Second Carnival palette // Nice independence blue #454B66 // Red wine #632B30
-const initialSegments = [{text: "EAT",angle: 0,size: 90},{text: "SLEEP",angle: 90,size: 90},{text: "SHOWER",angle: 180,size: 90},{text: "CHORES",angle: 270,size: 90}]
+const initialSegments = setInitialSegments("EAT, SLEEP, SHOWER, CHORES, GAMES")
 let volumeOn = true
 let friction = 0.99
 /* --- Canvas Setup --- */
 ctx.translate(canvas.width / 2, canvas.height / 2)
-ctx.font = "50px sans-serif"
+ctx.font = "50px serif"
 ctx.textBaseline = "middle"
 ctx.textAlign = "right"
 
@@ -67,7 +69,7 @@ function playAudio(){
 class Wheel{
   constructor(){
     this.isSpinning = false
-    this.size = 490
+    this.size = canvas.width/2 + 4
     this.rotation = 0
     this.speed = 0
     this.segments = []
@@ -77,14 +79,20 @@ class Wheel{
     ctx.setTransform(1, 0, 0, 1, canvas.width/2, canvas.height/2)
     ctx.rotate(-90 * Math.PI /180)
     ctx.rotate(this.rotation * Math.PI /180)
+
+    ctx.beginPath();
+    ctx.fillStyle = "white"
+    ctx.arc(0, 0, this.size, 0, Math.PI * 2)
+    ctx.closePath()
+    ctx.fill()
     
     /* Draw Segments */
     for(let i = 0; i < this.segments.length; i++){
       ctx.save()
       ctx.beginPath();
-      ctx.fillStyle = this.colors[i % colors.length]
+      ctx.fillStyle = this.colors[i % this.colors.length]
       ctx.strokeStyle = "#fff"
-      ctx.lineWidth = 10
+      ctx.lineWidth = 8
       ctx.rotate(this.segments[i].angle * Math.PI / 180)
       ctx.arc(0, 0, this.size, 0, this.segments[i].size * Math.PI / 180)
       ctx.lineTo(0,0)
@@ -101,9 +109,10 @@ class Wheel{
     }
     
     /* Draw dashed outline on the wheel */
+    /*
     ctx.beginPath()
     ctx.strokeStyle = "white"
-    ctx.lineWidth = 12
+    ctx.lineWidth = 15
     ctx.setLineDash([])
     ctx.arc(0, 0, this.size, 0, Math.PI*2)
     ctx.stroke()
@@ -113,21 +122,32 @@ class Wheel{
     ctx.setLineDash([Math.PI * 2 * this.size / this.segments.length / 4, Math.PI * 2 * this.size / this.segments.length / 4])
     ctx.arc(0, 0, this.size, 0, Math.PI*2)
     ctx.stroke()
+    */
     
     /* Draw inner circle */
     ctx.beginPath()
     ctx.fillStyle = "white"
-    ctx.strokeStyle = "black"
-    ctx.lineWidth = 10
+    ctx.strokeStyle = "#0002"
+    ctx.lineWidth = 40
     ctx.setLineDash([])
-    ctx.arc(0, 0, this.size/7, 0, Math.PI * 2)
+    ctx.arc(0, 0, this.size * .15, 0, Math.PI * 2)
     ctx.closePath()
-    ctx.fill()
     ctx.stroke()
+    ctx.fill()
+
+    ctx.beginPath()
+    ctx.fillStyle = "gold"
+    ctx.strokeStyle = "#333"
+    ctx.lineWidth = 10
+    ctx.arc(0, 0, this.size/20, 0, Math.PI * 2)
+    ctx.closePath()
+    ctx.stroke()
+    ctx.fill()
   }
   changeSegments(inputs){
     this.segments = []
     this.segments = inputs
+    this.colors = this.segments.length % 5 == 1 ? this.segments.length % 20 == 1 ? colors3 : colors4 : colors //Making sure there's no repeat color next to each other
     a = wheel.segments.length - 1 //Update the sound tracker variable
     
   }
@@ -240,4 +260,14 @@ inputArea.addEventListener("input", e =>{
     wheel.draw()
   }
 })
+}
+
+function setInitialSegments(str){
+  let inputs = str.split(", ")
+  let segments = []
+  let segmentSize = 360 / inputs.length
+      for(let i = 0; i < inputs.length; i++){
+        segments.push({text: inputs[i], angle: segmentSize * i, size: segmentSize})
+      }
+  return segments
 }
